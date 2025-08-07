@@ -64,6 +64,29 @@ def vis_core(plys):
     vis.destroy_window()
 
 
+def vis_pc(pc, bboxes=None, labels=None, save_dir='save_data'):
+    '''
+    ply: ply or np.ndarray (N, 4)
+    bboxes: np.ndarray, (n, 7) or (n, 8, 3)
+    labels: (n, )
+    '''
+    os.makedirs(save_dir, exist_ok=True)
+
+    if isinstance(pc, np.ndarray):
+        pc_o3d = o3d.geometry.PointCloud()
+        pc_o3d.points = o3d.utility.Vector3dVector(pc[:, :3])
+    else:
+        pc_o3d = pc_o3d
+    o3d.io.write_point_cloud(os.path.join(os.path.join(save_dir, "point_cloud.ply")), pc_o3d)
+
+    if bboxes is not None and labels is not None:
+        data = {
+            'bboxes': bboxes.tolist(),
+            'labels': labels.tolist()
+        }
+        with open(os.path.join(save_dir, "metadata.json"), 'w') as f:
+            json.dump(data, f)
+    print("点群とメタデータを保存しました")
 # def vis_pc(pc, bboxes=None, labels=None):
 #     '''
 #     pc: ply or np.ndarray (N, 4)
@@ -120,3 +143,5 @@ def vis_img_3d(img, image_points, labels, rt=True):
         return img
     cv2.imshow('bbox', img)
     cv2.waitKey(0)
+
+__all__ = ['vis_pc', 'vis_img_3d']
