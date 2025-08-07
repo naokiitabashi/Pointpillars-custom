@@ -64,7 +64,7 @@ def vis_core(plys):
     vis.destroy_window()
 
 
-def vis_pc(pc, bboxes=None, labels=None, save_dir='save_data'):
+def vis_pc(pc, bboxes=None, labels=None, save_dir='saved_data'):
     '''
     ply: ply or np.ndarray (N, 4)
     bboxes: np.ndarray, (n, 7) or (n, 8, 3)
