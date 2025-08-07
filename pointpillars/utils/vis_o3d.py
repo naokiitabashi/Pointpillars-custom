@@ -3,7 +3,7 @@ import numpy as np
 import open3d as o3d
 import os
 from pointpillars.utils import bbox3d2corners
-
+import json
 
 COLORS = [[1, 0, 0], [0, 1, 0], [0, 0, 1], [1, 1, 0]]
 COLORS_IMG = [[0, 0, 255], [0, 255, 0], [255, 0, 0], [0, 255, 255]]
@@ -64,37 +64,37 @@ def vis_core(plys):
     vis.destroy_window()
 
 
-def vis_pc(pc, bboxes=None, labels=None):
-    '''
-    pc: ply or np.ndarray (N, 4)
-    bboxes: np.ndarray, (n, 7) or (n, 8, 3)
-    labels: (n, )
-    '''
-    if isinstance(pc, np.ndarray):
-        pc = npy2ply(pc)
+# def vis_pc(pc, bboxes=None, labels=None):
+#     '''
+#     pc: ply or np.ndarray (N, 4)
+#     bboxes: np.ndarray, (n, 7) or (n, 8, 3)
+#     labels: (n, )
+#     '''
+#     if isinstance(pc, np.ndarray):
+#         pc = npy2ply(pc)
     
-    mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
-    size=10, origin=[0, 0, 0])
+#     mesh_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(
+#     size=10, origin=[0, 0, 0])
 
-    if bboxes is None:
-        vis_core([pc, mesh_frame])
-        return
+#     if bboxes is None:
+#         vis_core([pc, mesh_frame])
+#         return
     
-    if len(bboxes.shape) == 2:
-        bboxes = bbox3d2corners(bboxes)
+#     if len(bboxes.shape) == 2:
+#         bboxes = bbox3d2corners(bboxes)
     
-    vis_objs = [pc, mesh_frame]
-    for i in range(len(bboxes)):
-        bbox = bboxes[i]
-        if labels is None:
-            color = [1, 1, 0]
-        else:
-            if labels[i] >= 0 and labels[i] < 3:
-                color = COLORS[labels[i]]
-            else:
-                color = COLORS[-1]
-        vis_objs.append(bbox_obj(bbox, color=color))
-    vis_core(vis_objs)
+#     vis_objs = [pc, mesh_frame]
+#     for i in range(len(bboxes)):
+#         bbox = bboxes[i]
+#         if labels is None:
+#             color = [1, 1, 0]
+#         else:
+#             if labels[i] >= 0 and labels[i] < 3:
+#                 color = COLORS[labels[i]]
+#             else:
+#                 color = COLORS[-1]
+#         vis_objs.append(bbox_obj(bbox, color=color))
+#     vis_core(vis_objs)
 
 
 def vis_img_3d(img, image_points, labels, rt=True):
